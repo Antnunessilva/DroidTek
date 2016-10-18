@@ -1,5 +1,8 @@
 package com.aldaircruz.droidtek.util;
 
+import com.aldaircruz.droidtek.model.Product;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -13,6 +16,17 @@ public class Util {
     public static int randomNumberGenerator(int min, int max){
         int numeroGerado=Math.abs((random.nextInt(max - min + 1) + min));
         return numeroGerado;
+    }
+
+    public static Double sumOfProducts(ArrayList<Double> products){
+        Double sum=0d;
+
+        for (Double aDouble:products) {
+            sum+=aDouble;
+
+        }
+        return sum;
+
     }
 
 }
