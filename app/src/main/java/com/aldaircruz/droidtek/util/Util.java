@@ -14,8 +14,7 @@ public class Util {
     static Random random = new Random();
 
     public static int randomNumberGenerator(int min, int max){
-        int numeroGerado=Math.abs((random.nextInt(max - min + 1) + min));
-        return numeroGerado;
+        return Math.abs((random.nextInt(max - min + 1) + min));
     }
 
     public static Double sumOfProducts(ArrayList<Double> products){
@@ -23,7 +22,6 @@ public class Util {
 
         for (Double aDouble:products) {
             sum+=aDouble;
-
         }
         return sum;
 

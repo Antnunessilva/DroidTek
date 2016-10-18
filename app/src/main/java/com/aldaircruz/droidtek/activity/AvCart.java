@@ -27,7 +27,7 @@ public class AvCart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_av_carrinho);
 
-        Log.d("debug", StaticData.client.get(0).getNome());
+        Log.d(Constants.DEBUG_KEY, StaticData.client.get(0).getNome());
 
         final RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
         rv.setHasFixedSize(true);
@@ -57,6 +57,7 @@ public class AvCart extends AppCompatActivity {
             public void onClick(View view) {
 
                 mAdapter.addItem(new Product(),mAdapter.getItemCount());
+                mAdapter.notifyDataSetChanged();
 
             }
         });

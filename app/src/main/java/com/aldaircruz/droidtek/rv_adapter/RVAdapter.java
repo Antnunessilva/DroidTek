@@ -5,12 +5,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aldaircruz.droidtek.R;
+import com.aldaircruz.droidtek.data.Constants;
 import com.aldaircruz.droidtek.model.Product;
 import com.aldaircruz.droidtek.util.Util;
 
@@ -28,7 +30,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
     Activity activity;
     TextView txv_total;
     ArrayList<Double> preco = new ArrayList<>();
-    private static int lastEditedPosition=0;
 
     public RVAdapter(ArrayList<Product> products, Activity activity) {
         this.products = products;
@@ -47,7 +48,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
 
     public void addItem(Product dataObj, int index) {
         products.add(index, dataObj);
-        notifyItemInserted(index);
+      notifyItemInserted(index);
     }
 
     public void deleteItem(int index) {
@@ -71,20 +72,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
 
             @Override
             public void afterTextChanged(Editable s) {
+try{
 
-                if(holder.preco.getText().toString().trim().length()>0){
-                    int value=Integer.parseInt(holder.preco.getText().toString().trim());
-                    if(preco.size()> 0 && preco.get(position)>0)
-                        preco.set(position,0d);
+    if(holder.preco.getText().toString().trim().length()>0){
+        int value=Integer.parseInt(holder.preco.getText().toString().trim());
+        if(preco.size()> 0 && preco.get(position)>0)
+            preco.set(position,0d);
 
-                    preco.add(position,Double.valueOf(value));
-                }
-                else if(preco.size()>0){
-                    preco.set(position,0d);
-                }
+        preco.add(position,Double.valueOf(value));
+    }
+    else if(preco.size()>0){
+        preco.set(position,0d);
+    }
 
-                txv_total.setText(Util.sumOfProducts(preco)+"");
-
+    txv_total.setText(Util.sumOfProducts(preco)+"");
+}
+catch (Exception e){
+    Log.d(Constants.DEBUG_KEY,"error:"+e.getClass().getName()+","+e.getCause());
+}
 
             }
         });

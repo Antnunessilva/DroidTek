@@ -7,4 +7,5 @@ package com.aldaircruz.droidtek.data;
 public class Constants {
 
     public static final int numberOfProducts = 1;
+    public static final String  DEBUG_KEY= "DEBUG";
 }
