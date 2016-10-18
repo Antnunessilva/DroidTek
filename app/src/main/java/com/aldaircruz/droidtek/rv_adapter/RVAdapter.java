@@ -2,6 +2,8 @@ package com.aldaircruz.droidtek.rv_adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aldaircruz.droidtek.R;
+import com.aldaircruz.droidtek.data.Constants;
 import com.aldaircruz.droidtek.data.StaticData;
 import com.aldaircruz.droidtek.model.Product;
 
@@ -49,6 +52,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
 
     }
 
+    public void addItem(Product dataObj, int index) {
+        _products.add(index, dataObj);
+        notifyItemInserted(index);
+    }
+
+    public void deleteItem(int index) {
+        _products.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    public Product getItemById(int id){
+        return _products.get(id);
+    }
+
     @Override
     public void onBindViewHolder(final ProductViewHolder holder, final int position) {
 
@@ -73,6 +90,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
         holder.preco.setText(String.valueOf(_price));
 
 
+
+
         holder.preco.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -85,66 +104,79 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ProductViewHolder>
 
                 String preco;
 
-                if(holder.preco.getText().toString().trim().equals("")){
 
-                    Double total = 0d;
-                    if(position==lastEditedIndex){
-                        Log.d("DEBUG", "size before:"+StaticData.products.size());
+                try {
+                    if(holder.preco.getText().toString().trim().equals("")){
+
+                        Double total = 0d;
+                        if(position==lastEditedIndex){
+                            Log.d("DEBUG", "size before:"+StaticData.products.size());
+
+                            if(StaticData.products.size()>0)
+                            Log.d("DEBUG", "total:" + StaticData.products.get(0).getTotalPrice());
+
+                            Log.d("DEBUG", "removing...");
+
+
+                            total= StaticData.products.get(0).getTotalPrice();
+                            total-=lastInsertedPrice;
+                            StaticData.products.get(lastEditedIndex).setTotalPrice(total);
+
+                            StaticData.products.remove(lastEditedIndex);
+
+                            Log.d("DEBUG", "size after:"+StaticData.products.size());
+
+                        }
+
+                        Log.d("DEBUG","position:"+position);
+                        Log.d("DEBUG","last edited position:"+lastEditedIndex);
+
+                        Double totalProducts=0d;
+                        if(StaticData.products.size()>0)
+                        {
+                            totalProducts = StaticData.products.get(0).getTotalPrice();
+                        }
+                        txv_total.setText(String.valueOf(totalProducts));
+                    }else{
+
+                        lastEditedIndex = position;
+                        preco = holder.preco.getText().toString();
+                        Log.d("DEBUG", "preço:" + preco);
+
+                        String nome;
+                        String price="0";
+
+                        if(holder.nome.getText().toString().length()>0)
+                            nome = holder.nome.getText().toString();
+                        else nome ="";
+
+
+                        if(!holder.preco.getText().toString().trim().equals(""))
+                            price = holder.preco.getText().toString();
+                        else price="0";
+
+                        lastInsertedPrice = Double.valueOf(price);
+
+                        Product product = new Product();
+
+                        try {
+                            product.setPrice(lastInsertedPrice);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            product.setName(nome);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        StaticData.products.add(editing);
                         Log.d("DEBUG", "total:" + StaticData.products.get(0).getTotalPrice());
-                        Log.d("DEBUG", "removing...");
 
-
-                        total= StaticData.products.get(0).getTotalPrice();
-                        total-=lastInsertedPrice;
-                        StaticData.products.get(lastEditedIndex).setTotalPrice(total);
-
-                        StaticData.products.remove(lastEditedIndex);
-
-                        Log.d("DEBUG", "size after:"+StaticData.products.size());
-
+                        txv_total.setText(String.valueOf(StaticData.products.get(0).getTotalPrice()));
                     }
-
-                    Log.d("DEBUG","position:"+position);
-                    Log.d("DEBUG","last edited position:"+lastEditedIndex);
-                    Double totalProducts = StaticData.products.get(0).getTotalPrice();
-                    txv_total.setText(String.valueOf(totalProducts));
-                }else{
-
-                    lastEditedIndex = position;
-                    preco = holder.preco.getText().toString();
-                    Log.d("DEBUG", "preço:" + preco);
-
-                    String nome;
-                    String price="0";
-
-                    if(holder.nome.getText().toString().length()>0)
-                        nome = holder.nome.getText().toString();
-                    else nome ="";
-
-
-                    if(!holder.preco.getText().toString().trim().equals(""))
-                        price = holder.preco.getText().toString();
-                    else price="0";
-
-                    lastInsertedPrice = Double.valueOf(price);
-
-                    Product product = new Product();
-
-                    try {
-                        product.setPrice(lastInsertedPrice);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        product.setName(nome);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    StaticData.products.add(editing);
-                    Log.d("DEBUG", "total:" + StaticData.products.get(0).getTotalPrice());
-
-                    txv_total.setText(String.valueOf(StaticData.products.get(0).getTotalPrice()));
+                } catch (Exception e) {
+                    Log.d("DEBUG","erro");
                 }
 
             }

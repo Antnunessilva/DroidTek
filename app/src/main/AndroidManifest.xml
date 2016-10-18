@@ -19,7 +19,7 @@
         <activity
             android:name=".activity.AvNewClient"
             android:noHistory="true" />
-        <activity android:name=".activity.AvCart"></activity>
+        <activity android:name=".activity.AvCart" />
     </application>
 
 </manifest>

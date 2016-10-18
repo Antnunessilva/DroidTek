@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class StaticData {
 
-    public static ArrayList<Client> client = new ArrayList<>(20);
-    public static ArrayList<Product> products = new ArrayList<>();
+    public static ArrayList<Client> client = new ArrayList<>();
+    public static ArrayList<Product> products;
     public static int lastEditedSerial=0;
 
 }
